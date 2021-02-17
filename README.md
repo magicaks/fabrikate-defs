@@ -6,7 +6,7 @@ This repo contains high level Fabrikate specification for MagicAKS.
 
 Edit users.yaml to specify list of users and groups which have access to cluster. Since MagicAKS is an RBAC enabled cluster, users and groups are specified in Azure Active Directory(AAD). You can get the id's for users and groups from AAD in Azure Portal.
 
-Create a github actions pipeline using the content of this [file](gh.yaml). The pipeline runs fabrikate to generate kubenetes manifests and pushes them to k8s admin manifest git repo.
+Create a github actions pipeline using the content of this [file](.github/workflows/main.yml). The pipeline runs fabrikate to generate kubenetes manifests and pushes them to k8s admin manifest git repo.
 
 Flux(gitOps) is setup to track admin manifest repo and any changes made to fabrikate definitions will trigeer the actions pipeline and push new changes to admin manifest repo and eventually reflect in the cluster.
 
