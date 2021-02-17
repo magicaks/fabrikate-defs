@@ -1,4 +1,11 @@
 name: Generate K8s admin manifests
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
