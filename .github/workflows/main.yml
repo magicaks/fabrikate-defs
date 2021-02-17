@@ -1,4 +1,5 @@
 name: Generate K8s admin manifests
+
 on:
   push:
     branches:
