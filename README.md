@@ -4,7 +4,11 @@ This repo contains high level [Fabrikate](https://github.com/microsoft/fabrikate
 
 ## Steps
 
-Edit users.yaml to specify list of users and groups which have access to cluster. Since MagicAKS is an RBAC enabled cluster, users and groups are specified in Azure Active Directory(AAD). You can get the id's for users and groups from AAD in Azure Portal.
+Edit [users.yaml](users.yaml) to specify list of users and groups which have access to cluster. Since MagicAKS is an RBAC enabled cluster, users and groups are specified in Azure Active Directory(AAD). You can get the object id's for users and groups from AAD in Azure Portal.
+
+> **IMPORTANT:** The user and group object id's must be from the AAD tenant that governs RBAC access to the cluster. If you are federating users or are using a [personal AAD](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-access-create-new-tenant), users will have different object id's in each AAD tenant.
+
+> **NOTE:** To get the user object id for the signed in user run this command ```az ad user show --id myuser@contoso.com --query objectId --out tsv``` and group object id this command ```az ad group show --group yourgroupname --query objectId --out tsv```.
 
 [Create](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) a repository secret named ACCESS_TOKEN which holds github [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with repo permissions.
 
