@@ -1,14 +1,24 @@
 # Generate Admin K8s Manifests for MagicAKS
 
-This repo contains high level Fabrikate specification for MagicAKS.
+This repo contains high level [Fabrikate](https://github.com/microsoft/fabrikate) specification for MagicAKS.
 
 ## Steps
 
-Edit users.yaml to specify list of users and groups which have access to cluster. Since MagicAKS is an RBAC enabled cluster, users and groups are specified in Azure Active Directory(AAD). You can get the id's for users and groups from AAD in Azure Portal.
+Edit [users.yaml](users.yaml) to specify list of users and groups which have access to cluster. Since MagicAKS is an RBAC enabled cluster, users and groups are specified in Azure Active Directory(AAD). You can get the object id's for users and groups from AAD in Azure Portal.
 
-Create a github actions pipeline using the content of this [file](.github/workflows/main.yml). The pipeline runs fabrikate to generate kubenetes manifests and pushes them to k8s admin manifest git repo.
+> **IMPORTANT:** The user and group object id's must be from the AAD tenant that governs RBAC access to the cluster. If you are federating users or are using a [personal AAD](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-access-create-new-tenant), users will have different object id's in each AAD tenant.
 
-Flux(gitOps) is setup to track admin manifest repo and any changes made to fabrikate definitions will trigeer the actions pipeline and push new changes to admin manifest repo and eventually reflect in the cluster.
+> **NOTE:** To get the user object id for the signed in user run this command ```az ad user show --id myuser@contoso.com --query objectId --out tsv``` and group object id this command ```az ad group show --group yourgroupname --query objectId --out tsv```.
+
+[Create](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) a repository secret named ACCESS_TOKEN which holds github [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with repo permissions.
+
+Fork the [repo](https://github.com/magicaks/k8smanifests) to create an admin manifest repo for yourself.
+
+Change **REPO** in [file](.github/workflows/main.yml) to point to your new admin manifest repo created above.
+
+Commit the changes made to origin. This will trigger an actions pipeline run. The pipeline runs fabrikate to generate kubenetes manifests and pushes them to k8s admin manifest git repo. Check the output of the actions pipeline and ensure everything ran well. If the run is successful you should see changes applied to your admin manifest repo.
+
+MagicAKS sets up Flux(gitOps) to track admin manifest repo. Any changes made to fabrikate definitions will trigger the actions pipeline and push new changes to admin manifest repo and eventually reflect in the cluster.
 
 Within ``build.sh`` which is executed from the actions pipeline mentioned above you will find
 
@@ -23,4 +33,5 @@ function generate_azmon_configs() {
     python azmonconfig-generator.py $1 $2
 }
 ```
+
 This creates the necessary rbac configs which are then placed in the fabrikate generated folder and hence pushed to the k8s manifest repo during git push.
