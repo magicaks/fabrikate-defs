@@ -10,7 +10,7 @@ clusters:
 
     # AAD groups who have access to the cluster
     groups:
-    - name: magicaksadmins
+    - name: appdevs
       id: 4dfb40d4-993d-4e13-a67d-eed487c12666
 
     # Apps (namespaces) running in the cluster to which the groups above should have read access to
@@ -20,7 +20,7 @@ clusters:
 # Production environment RBAC configuration
 - prod:
     groups:
-    - name: magicaksadmins
+    - name: appdevs
       role: cluster-admin
       id: 4dfb40d4-993d-4e13-a67d-eed487c12666
     apps:
