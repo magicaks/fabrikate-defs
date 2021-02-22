@@ -33,7 +33,7 @@ Execute the following steps to initialize the Flux (GitOps) for your cluster:
     1. [Create a repository secret](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository), named `ACCESS_TOKEN`, for this repository using the value of the personal access token
 1. Duplicate or fork [the K8s manifests repository](https://github.com/magicaks/k8smanifests) to create an admin manifest repository for yourself
 1. Change the value of the `REPO` variable in the last step of [the `main.yml` pipeline file](.github/workflows/main.yml) to point to your new admin manifest repo created in the previous step
-1. Grant execution permissions for the build script and Fabrikate executable so that GitHub Actions pipeline can run them:
+1. Make sure the build script and the Fabrikate executable have execute permissions set so that the GitHub Actions pipeline can run them:
 
     ```bash
     git update-index --chmod=+x build.sh
