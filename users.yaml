@@ -1,19 +1,27 @@
 ---
 clusters:
+# Development environment RBAC configuration
 - dev:
+    # AAD users who have access to the cluster
     users:
     - name: Sachin Kundu
       email: sakundu@microsoft.com
       id: e82dcb97-3150-49aa-b1e4-863eb82768a4
+
+    # AAD groups who have access to the cluster
     groups:
-    - id: 4dfb40d4-993d-4e13-a67d-eed487c12666
-      name: appdevs
+    - name: magicaksadmins
+      id: 4dfb40d4-993d-4e13-a67d-eed487c12666
+
+    # Apps (namespaces) running in the cluster to which the groups above should have read access to
     apps:
     - name: app1
 
+# Production environment RBAC configuration
 - prod:
     groups:
-    - id: 2345
+    - name: magicaksadmins
       role: cluster-admin
+      id: 4dfb40d4-993d-4e13-a67d-eed487c12666
     apps:
     - name: app1
