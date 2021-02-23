@@ -2,9 +2,9 @@
 
 This repository contains [Fabrikate](https://github.com/microsoft/fabrikate) high-level definitions (HLD) for [MagicAKS](https://github.com/magicaks/magicaks).
 
-MagicAKS sets up [Flux (GitOps)](https://fluxcd.io/) to track [the admin manifest repo](https://github.com/magicaks/k8smanifests). Any changes made to Fabrikate definitions here will trigger the [GitHub Actions](https://docs.github.com/en/actions) pipeline ([`.github/workflows/main.yml`](./.github/workflows/main.yml)) and push new changes to the admin manifest repo and those changes will eventually be reflected in the cluster.
+MagicAKS sets up [Flux (GitOps)](https://fluxcd.io/) to track [the Kubernetes (K8s) manifest repository](https://github.com/magicaks/k8smanifests) ("manifest repo" for short). Any changes made to Fabrikate definitions here will trigger the [GitHub Actions](https://docs.github.com/en/actions) pipeline ([`.github/workflows/main.yml`](./.github/workflows/main.yml)) and push new changes to the manifest repo and those changes will eventually be reflected in the cluster.
 
-The [`build.sh`](./build.sh) script, executed by the pipeline, creates the necessary [role-based access control (RBAC)](https://docs.microsoft.com/en-us/azure/role-based-access-control/overview) configuration, which is then placed in the Fabrikate generated folder and hence pushed to the Kubernetes (K8s) manifest repository.
+The [`build.sh`](./build.sh) script, executed by the pipeline, creates the necessary [role-based access control (RBAC)](https://docs.microsoft.com/en-us/azure/role-based-access-control/overview) configuration, which is then placed in the Fabrikate generated folder and pushed to the manifest repo.
 
 ## Getting started
 
@@ -31,8 +31,8 @@ Execute the following steps to initialize the Flux (GitOps) for your cluster:
     1. [Create a personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with **repo** scope (full control of private repositories)
         > **Note:** Make sure to copy the access token value once created, because you cannot access it again.
     1. [Create a repository secret](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository), named `ACCESS_TOKEN`, for this repository using the value of the personal access token
-1. Duplicate or fork [the K8s manifests repository](https://github.com/magicaks/k8smanifests) to create an admin manifest repository for yourself
-1. Change the value of the `REPO` variable in the last step of [the `main.yml` pipeline file](.github/workflows/main.yml) to point to your new admin manifest repo created in the previous step
+1. Duplicate or fork [the manifest repo](https://github.com/magicaks/k8smanifests) to create one for yourself
+1. Change the value of the `REPO` variable in the last step of [the `main.yml` pipeline file](.github/workflows/main.yml) to point to your new manifest repo created in the previous step
 1. Make sure the build script and the Fabrikate executable have execute permissions set so that the GitHub Actions pipeline can run them:
 
     ```bash
@@ -43,5 +43,5 @@ Execute the following steps to initialize the Flux (GitOps) for your cluster:
     > **Note:** These changes too need to be committed (`git commit`).
 
 1. Commit and push the changes made
-    * This will trigger the GitHub Actions pipeline, which runs Fabrikate to generate the K8s manifests and pushes them to the K8s admin manifest git repository
-    * Check the output of the pipeline to ensure everything ran well; if the run was successful, you should see changes applied to your admin manifest repo
+    * This will trigger the GitHub Actions pipeline, which runs Fabrikate to generate the K8s manifests and pushes them to the manifest repo
+    * Check the output of the pipeline to ensure everything ran well; if the run was successful, you should see changes applied to your manifest repo
