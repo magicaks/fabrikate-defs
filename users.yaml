@@ -2,11 +2,11 @@
 clusters:
 - dev:
     users:
-    - name: Sachin Kundu
-      email: sakundu@microsoft.com
-      id: e82dcb97-3150-49aa-b1e4-863eb82768a4
+    - name: Anders Lybecker
+      email: anlybeck@microsoft.com
+      id: c435e055-3785-4a7b-9429-5fe4cb6275f8
     groups:
-    - id: 4dfb40d4-993d-4e13-a67d-eed487c12666
+    - id: 62bbc43f-49c6-48c1-8306-bb5a30a526ea
       name: appdevs
     apps:
     - name: app1
