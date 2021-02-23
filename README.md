@@ -10,7 +10,7 @@ The [`build.sh`](./build.sh) script, executed by the pipeline, creates the neces
 
 Execute the following steps to initialize Flux (GitOps) for your cluster:
 
-1. Edit the [`users.yaml`](./users.yaml) file to specify the list of users and groups which have access to the cluster
+1. Edit the [`users.yaml`](./users.yaml) file to specify the list of users and groups that have access to the cluster
 
     > **Important:** User and group object IDs are specific to an AAD tenant. Make sure to retrieve the user and group object IDs from the AAD tenant that governs the RBAC access to the cluster.
 
