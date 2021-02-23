@@ -8,7 +8,7 @@ The [`build.sh`](./build.sh) script, executed by the pipeline, creates the neces
 
 ## Getting started
 
-Execute the following steps to initialize the Flux (GitOps) for your cluster:
+Execute the following steps to initialize Flux (GitOps) for your cluster:
 
 1. Edit the [`users.yaml`](./users.yaml) file to specify the list of users and groups which have access to the cluster
 
