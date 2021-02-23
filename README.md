@@ -2,7 +2,7 @@
 
 This repository contains [Fabrikate](https://github.com/microsoft/fabrikate) high-level definitions (HLD) for [MagicAKS](https://github.com/magicaks/magicaks).
 
-MagicAKS sets up [Flux (GitOps)](https://fluxcd.io/) to track the admin manifest repo. Any changes made to Fabrikate definitions here will trigger the [GitHub Actions](https://docs.github.com/en/actions) pipeline ([`.github/workflows/main.yml`](./.github/workflows/main.yml)) and push new changes to the admin manifest repo and those changes will eventually be reflected in the cluster.
+MagicAKS sets up [Flux (GitOps)](https://fluxcd.io/) to track [the admin manifest repo](https://github.com/magicaks/k8smanifests). Any changes made to Fabrikate definitions here will trigger the [GitHub Actions](https://docs.github.com/en/actions) pipeline ([`.github/workflows/main.yml`](./.github/workflows/main.yml)) and push new changes to the admin manifest repo and those changes will eventually be reflected in the cluster.
 
 The [`build.sh`](./build.sh) script, executed by the pipeline, creates the necessary [role-based access control (RBAC)](https://docs.microsoft.com/en-us/azure/role-based-access-control/overview) configuration, which is then placed in the Fabrikate generated folder and hence pushed to the Kubernetes (K8s) manifest repository.
 
