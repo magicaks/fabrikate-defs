@@ -1,37 +1,47 @@
-# Generate Admin K8s Manifests for MagicAKS
+# MagicAKS Fabrikate high-level definitions
 
-This repo contains high level [Fabrikate](https://github.com/microsoft/fabrikate) specification for MagicAKS.
+This repository contains [Fabrikate](https://github.com/microsoft/fabrikate) high-level definitions (HLD) for [MagicAKS](https://github.com/magicaks/magicaks).
 
-## Steps
+MagicAKS sets up [Flux (GitOps)](https://fluxcd.io/) to track [the Kubernetes (K8s) manifest repository](https://github.com/magicaks/k8smanifests) ("manifest repo" for short). Any changes made to Fabrikate definitions here will trigger the [GitHub Actions](https://docs.github.com/en/actions) pipeline ([`.github/workflows/main.yml`](./.github/workflows/main.yml)) and push new changes to the manifest repo and those changes will eventually be reflected in the cluster.
 
-Edit [users.yaml](users.yaml) to specify list of users and groups which have access to cluster. Since MagicAKS is an RBAC enabled cluster, users and groups are specified in Azure Active Directory(AAD). You can get the object id's for users and groups from AAD in Azure Portal.
+The [`build.sh`](./build.sh) script, executed by the pipeline, creates the necessary [role-based access control (RBAC)](https://docs.microsoft.com/en-us/azure/role-based-access-control/overview) configuration, which is then placed in the Fabrikate generated folder and pushed to the manifest repo.
 
-> **IMPORTANT:** The user and group object id's must be from the AAD tenant that governs RBAC access to the cluster. If you are federating users or are using a [personal AAD](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-access-create-new-tenant), users will have different object id's in each AAD tenant.
+## Getting started
 
-> **NOTE:** To get the user object id for the signed in user run this command ```az ad user show --id myuser@contoso.com --query objectId --out tsv``` and group object id this command ```az ad group show --group yourgroupname --query objectId --out tsv```.
+Execute the following steps to initialize Flux (GitOps) for your cluster:
 
-[Create](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) a repository secret named ACCESS_TOKEN which holds github [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with repo permissions.
+1. Edit the [`users.yaml`](./users.yaml) file to specify the list of users and groups that have access to the cluster
 
-Fork the [repo](https://github.com/magicaks/k8smanifests) to create an admin manifest repo for yourself.
+    > **Important:** User and group object IDs are specific to an AAD tenant. Make sure to retrieve the user and group object IDs from the AAD tenant that governs the RBAC access to the cluster.
 
-Change **REPO** in [file](.github/workflows/main.yml) to point to your new admin manifest repo created above.
+    * Since MagicAKS is a RBAC enabled cluster, users and groups are defined in [Azure Active Directory (AAD)](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis). You can retrieve the object IDs of users and groups from AAD in [Azure Portal](https://portal.azure.com) or by [command line tools](https://docs.microsoft.com/en-us/azure/healthcare-apis/find-identity-object-ids). Examples using Azure CLI:
+        * User object ID:
 
-Commit the changes made to origin. This will trigger an actions pipeline run. The pipeline runs fabrikate to generate kubenetes manifests and pushes them to k8s admin manifest git repo. Check the output of the actions pipeline and ensure everything ran well. If the run is successful you should see changes applied to your admin manifest repo.
+            ```bash
+            az ad user show --id "<user principal name>" --query objectId --out tsv
+            ```
 
-MagicAKS sets up Flux(gitOps) to track admin manifest repo. Any changes made to fabrikate definitions will trigger the actions pipeline and push new changes to admin manifest repo and eventually reflect in the cluster.
+        * Group object ID:
 
-Within ``build.sh`` which is executed from the actions pipeline mentioned above you will find
+            ```bash
+            az ad group show --group "<group name>" --query objectId --out tsv
+            ```
 
-```bash
-function generate_rbac_configs() {
-    echo "generate rbac configs"
-    python rbac-generator.py $1 $2
-}
+1. Create a secret for this repository containing an access token so that the GitOps process can monitor repositories and update manifests
+    1. [Create a personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with **repo** scope (full control of private repositories)
+        > **Note:** Make sure to copy the access token value once created, because you cannot access it again.
+    1. [Create a repository secret](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository), named `ACCESS_TOKEN`, for this repository using the value of the personal access token
+1. Duplicate or fork [the manifest repo](https://github.com/magicaks/k8smanifests) to create one for yourself
+1. Change the value of the `REPO` variable in the last step of [the `main.yml` pipeline file](.github/workflows/main.yml) to point to your new manifest repo created in the previous step
+1. Make sure the build script and the Fabrikate executable have execute permissions set so that the GitHub Actions pipeline can run them:
 
-function generate_azmon_configs() {
-    echo "generate azure monitor configs"
-    python azmonconfig-generator.py $1 $2
-}
-```
+    ```bash
+    git update-index --chmod=+x build.sh
+    git update-index --chmod=+x bin/fab
+    ```
 
-This creates the necessary rbac configs which are then placed in the fabrikate generated folder and hence pushed to the k8s manifest repo during git push.
+    > **Note:** These changes too need to be committed (`git commit`).
+
+1. Commit and push the changes made
+    * This will trigger the GitHub Actions pipeline, which runs Fabrikate to generate the K8s manifests and pushes them to the manifest repo
+    * Check the output of the pipeline to ensure everything ran well; if the run was successful, you should see changes applied to your manifest repo

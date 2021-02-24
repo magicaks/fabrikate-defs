@@ -1,19 +1,27 @@
 ---
 clusters:
+# Development environment RBAC configuration
 - dev:
+    # AAD users who have access to the cluster
     users:
-    - name: Anders Lybecker
-      email: anlybeck@microsoft.com
-      id: c435e055-3785-4a7b-9429-5fe4cb6275f8
+    - name: Shardik
+      email: shardik@northcentralpositronics.mw
+      id: 293a61e1-df7c-4ac6-bf3c-86603022b39b
+
+    # AAD groups who have access to the cluster
     groups:
-    - id: 62bbc43f-49c6-48c1-8306-bb5a30a526ea
-      name: appdevs
+    - name: appdevs
+      id: 4dfb40d4-993d-4e13-a67d-eed487c12666
+
+    # Apps (namespaces) running in the cluster to which the groups above should have read access to
     apps:
     - name: app1
 
+# Production environment RBAC configuration
 - prod:
     groups:
-    - id: 2345
+    - name: appadmins
       role: cluster-admin
+      id: 1a20cea8-9016-4f7d-88c6-7899bb9aeca0
     apps:
     - name: app1
