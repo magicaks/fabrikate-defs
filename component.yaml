@@ -16,9 +16,16 @@ subcomponents:
   source: "."
   type: static
 
+# Install AKS2K8s CRD as recommend in installation.
+- name: akv2k8s-crd
+  method: local
+  path: "raw/akvk8scrd"
+  source: "."
+  type: static
+
 # Install akv2k8s - Key Vault access for AKS.
 - name: akv2k8s-kvcontroller
   method: helm
   source: http://charts.spvapi.no
-  path: azure-key-vault-controller
+  path: akv2k8s
   type: helm
