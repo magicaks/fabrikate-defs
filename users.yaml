@@ -20,8 +20,8 @@ clusters:
 # Production environment RBAC configuration
 - prod:
     groups:
-    - name: appdevs
+    - name: appadmins
       role: cluster-admin
-      id: 4dfb40d4-993d-4e13-a67d-eed487c12666
+      id: 1a20cea8-9016-4f7d-88c6-7899bb9aeca0
     apps:
     - name: app1
