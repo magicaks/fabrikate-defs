@@ -31,7 +31,7 @@ Execute the following steps to initialize Flux (GitOps) for your cluster:
     1. [Create a personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with **repo** scope (full control of private repositories)
         > **Note:** Make sure to copy the access token value once created, because you cannot access it again.
     1. [Create a repository secret](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository), named `ACCESS_TOKEN`, for this repository using the value of the personal access token
-1. Duplicate or fork [the manifest repo](https://github.com/magicaks/k8smanifests) to create one for yourself
+1. Duplicate the manifest repo to create one for yourself using the following link: [`https://github.com/magicaks/fabrikate-defs/generate`](https://github.com/magicaks/fabrikate-defs/generate)
 1. Change the value of the `REPO` variable in the last step of [the `main.yml` pipeline file](.github/workflows/main.yml) to point to your new manifest repo created in the previous step
 1. Make sure the build script and the Fabrikate executable have execute permissions set so that the GitHub Actions pipeline can run them:
 
